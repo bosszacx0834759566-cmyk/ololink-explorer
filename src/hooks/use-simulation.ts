@@ -69,7 +69,7 @@ export function useSimulation(): SimState {
   useEffect(() => {
     const t = setInterval(() => {
       const pool = SEED_LOGS[scenarioId];
-      const msg = pool[Math.floor(Math.random() * pool.length)];
+      const msg = pool[Math.floor(Math.random() * pool.length)]!;
       const entry: LogEntry = {
         id: `auto-${logCounter.current++}`,
         time: formatT(missionTime),

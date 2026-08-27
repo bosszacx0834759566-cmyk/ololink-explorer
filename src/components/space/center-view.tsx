@@ -51,7 +51,7 @@ export function CenterView({ scenario }: { scenario: Scenario }) {
   const links = useMemo(() => {
     const l: { from: NodeId; to: NodeId; key: string }[] = [];
     for (let i = 0; i < path.length - 1; i++) {
-      l.push({ from: path[i], to: path[i + 1], key: `${path[i]}-${path[i + 1]}` });
+      l.push({ from: path[i]!, to: path[i + 1]!, key: `${path[i]}-${path[i + 1]}` });
     }
     return l;
   }, [path]);
@@ -343,7 +343,7 @@ export function CenterView({ scenario }: { scenario: Scenario }) {
                     initial={{ offsetDistance: '0%', opacity: 0 }}
                     animate={{ offsetDistance: ['0%', '100%'], opacity: [0, 1, 1, 0] }}
                     transition={{ duration: 2, repeat: Infinity, delay, ease: 'linear' }}
-                    style={{ offsetPath: `path('${pathD}')` } as React.CSSProperties}
+                    style={{ offsetPath: `path('${pathD}')` } as unknown as import('framer-motion').MotionStyle}
                   />
                 ))}
               </g>
@@ -373,7 +373,7 @@ export function CenterView({ scenario }: { scenario: Scenario }) {
                   initial={{ offsetDistance: '0%', opacity: 0 }}
                   animate={{ offsetDistance: ['0%', '100%'], opacity: [0, 1, 1, 0] }}
                   transition={{ duration: 2.2, repeat: Infinity, delay, ease: 'linear' }}
-                  style={{ offsetPath: `path('${wavePath}')` } as React.CSSProperties}
+                  style={{ offsetPath: `path('${wavePath}')` } as unknown as import('framer-motion').MotionStyle}
                 />
               ))}
             </g>
