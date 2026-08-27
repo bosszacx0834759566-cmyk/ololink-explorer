@@ -93,7 +93,10 @@ export function useSimulation(): SimState {
           message: `Scenario switched → ${SCENARIOS[id].name}`,
           level: 'INFO',
         },
-        ...SCENARIOS[id].logs.filter((l) => !prev.some((p) => p.message === l.message)).slice(0, 4),
+        ...SCENARIOS[id].logs
+          .filter((l) => !prev.some((p) => p.message === l.message))
+          .slice(0, 4)
+          .map((l) => ({ ...l, id: `${id}-${l.id}` })),
       ]);
       setAiProcessing(false);
     }, 1100);
