@@ -41,7 +41,7 @@ function Earth() {
   const ref = useRef<THREE.Group>(null);
 
   return (
-    <group ref={ref} rotation={[0, Math.PI, 0]}>
+    <group ref={ref}>
       <mesh>
         <sphereGeometry args={[1, 96, 96]} />
         <meshStandardMaterial map={texture} color="#b9d4ea" metalness={0.1} roughness={0.8} />
