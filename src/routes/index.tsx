@@ -1,104 +1,87 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { AlertTriangle } from "lucide-react";
+import { createFileRoute } from '@tanstack/react-router';
+import { lazy, Suspense } from 'react';
 
-import { useSimulation } from "@/hooks/use-simulation";
-import { TopNav } from "@/components/space/top-nav";
-import { LeftPanel } from "@/components/space/left-panel";
-import { CenterView } from "@/components/space/center-view";
-import { RightPanel } from "@/components/space/right-panel";
-import { ScenarioBar } from "@/components/space/scenario-bar";
-import { ArchitectureStrip } from "@/components/space/architecture-strip";
+import { useOloLink } from '@/hooks/use-ololink';
+import { TopBar } from '@/components/ololink/top-bar';
+import { Rail } from '@/components/ololink/rail';
+import { ContextPanel } from '@/components/ololink/context-panel';
+import { ObjectCard } from '@/components/ololink/object-card';
+import { Dock } from '@/components/ololink/dock';
 
-export const Route = createFileRoute("/")({
+const GlobeScene = lazy(() =>
+  import('@/components/ololink/globe-scene').then((m) => ({ default: m.GlobeScene }))
+);
+
+export const Route = createFileRoute('/')({
+  ssr: false,
   head: () => ({
     meta: [
-      { title: "SSpace — Mission Control" },
+      { title: 'OloLink Explorer — Spatial Network Operations' },
       {
-        name: "description",
+        name: 'description',
         content:
-          "SSpace operational concept demonstration: adaptive space-to-Earth communication infrastructure for adverse weather conditions.",
+          'OloLink Explorer: a spatial operating environment for intelligent communication orchestration across LEO satellites, HAPS, relay drones and ground stations.',
       },
-      { property: "og:title", content: "SSpace — Mission Control" },
+      { property: 'og:title', content: 'OloLink Explorer — Spatial Network Operations' },
       {
-        property: "og:description",
+        property: 'og:description',
         content:
-          "Adaptive space-to-Earth communication infrastructure concept: watch the AI reroute satellite links through HAPS and relay drones when weather strikes.",
+          'Operate the global communication network from a live 3D Earth: adaptive routing, weather intelligence and AI decisions in one spatial environment.',
       },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
+      { property: 'og:type', content: 'website' },
+      { name: 'twitter:card', content: 'summary_large_image' },
     ],
   }),
-  component: Index,
+  component: Explorer,
 });
 
-function Index() {
-  const sim = useSimulation();
+function Explorer() {
+  const state = useOloLink();
 
   return (
-    <div className="flex h-screen flex-col bg-background">
-      <TopNav
-        scenario={sim.scenario}
-        scenarioId={sim.scenarioId}
-        missionTime={sim.missionTime}
-        aiProcessing={sim.aiProcessing}
-        telemetry={sim.telemetry}
+    <div className="relative h-screen w-full overflow-hidden bg-[#05070e] text-foreground">
+      {/* LEVEL 1 — spatial environment */}
+      <div className="absolute inset-0">
+        <Suspense
+          fallback={
+            <div className="flex h-full items-center justify-center">
+              <span className="animate-pulse font-mono text-[10px] uppercase tracking-[0.3em] text-sky-400/70">
+                Initialising spatial environment
+              </span>
+            </div>
+          }
+        >
+          <GlobeScene state={state} />
+        </Suspense>
+      </div>
+
+      {/* command status layer */}
+      <TopBar state={state} />
+
+      {/* LEVEL 2 — navigation rail */}
+      <Rail
+        active={state.panel}
+        onToggle={state.togglePanel}
+        alertCount={state.profile.alerts.length}
       />
 
-      {/* Control bar */}
-      <div className="flex flex-col gap-2 border-b border-border/70 bg-background/60 px-4 py-2.5">
-        <ScenarioBar active={sim.scenarioId} onSelect={sim.setScenario} disabled={sim.aiProcessing} />
-        <ArchitectureStrip />
-      </div>
+      {/* LEVEL 3 — contextual side panel */}
+      <ContextPanel state={state} />
 
-      {/* Main 3-column layout */}
-      <main className="grid flex-1 grid-cols-1 gap-3 overflow-hidden p-3 lg:grid-cols-[260px_1fr_320px]">
-        {/* Left */}
-        <div className="hidden overflow-hidden lg:block">
-          <LeftPanel scenario={sim.scenario} />
+      {/* LEVEL 4 — object-specific information */}
+      <ObjectCard state={state} />
+
+      {/* compact command dock */}
+      <Dock state={state} />
+
+      {/* ambient hint */}
+      {!state.selection && !state.panel && (
+        <div className="pointer-events-none absolute bottom-16 left-1/2 z-20 -translate-x-1/2 text-center">
+          <p className="font-mono text-[9px] uppercase tracking-[0.3em] text-muted-foreground/50">
+            Drag to orbit · click an asset or link to inspect
+          </p>
         </div>
-
-        {/* Center */}
-        <div className="min-h-[420px]">
-          <CenterView scenario={sim.scenario} />
-        </div>
-
-        {/* Right */}
-        <div className="hidden overflow-hidden lg:block">
-          <RightPanel
-            scenario={sim.scenario}
-            telemetry={sim.telemetry}
-            logs={sim.logs}
-            aiProcessing={sim.aiProcessing}
-            missionTime={sim.missionTime}
-          />
-        </div>
-      </main>
-
-      {/* Mobile stacked panels */}
-      <div className="flex flex-col gap-3 p-3 lg:hidden">
-        <LeftPanel scenario={sim.scenario} />
-        <RightPanel
-          scenario={sim.scenario}
-          telemetry={sim.telemetry}
-          logs={sim.logs}
-          aiProcessing={sim.aiProcessing}
-          missionTime={sim.missionTime}
-        />
-      </div>
-
-      {/* Disclaimer footer */}
-      <footer className="border-t border-border/70 bg-background/80 px-4 py-2">
-        <div className="flex items-center gap-2 text-[10px] text-muted-foreground">
-          <AlertTriangle className="h-3 w-3 text-warning/70" />
-          <span>
-            This prototype is a conceptual operational demonstration for system architecture and
-            workflow. It is not a validated engineering implementation.
-          </span>
-          <span className="ml-auto hidden font-mono-tel text-muted-foreground/60 sm:block">
-            OloLink · Mission Control Concept v1.0
-          </span>
-        </div>
-      </footer>
+      )}
     </div>
   );
 }
