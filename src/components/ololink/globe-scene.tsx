@@ -41,7 +41,7 @@ function Earth() {
   const ref = useRef<THREE.Group>(null);
 
   return (
-    <group ref={ref} rotation={[0, Math.PI, 0]}>
+    <group ref={ref}>
       <mesh>
         <sphereGeometry args={[1, 96, 96]} />
         <meshStandardMaterial map={texture} color="#b9d4ea" metalness={0.1} roughness={0.8} />
@@ -226,7 +226,7 @@ function AssetNode({
         <meshBasicMaterial color={color} transparent opacity={0.25} side={THREE.DoubleSide} />
       </mesh>
       {(showLabel || hover || selected) && (
-        <Html center distanceFactor={7} position={[0, size * 4, 0]} zIndexRange={[20, 0]}>
+        <Html center distanceFactor={1.6} position={[0, size * 4, 0]} zIndexRange={[20, 0]}>
           <div
             className={`pointer-events-none select-none whitespace-nowrap font-mono text-[9px] uppercase tracking-[0.18em] transition-opacity ${
               selected || hover ? 'text-foreground' : 'text-foreground/55'
@@ -335,7 +335,7 @@ function SceneContent({ state }: { state: OloLinkState }) {
   return (
     <>
       <ambientLight intensity={1.05} />
-      <directionalLight position={[-2, 2, -5]} intensity={1.6} color="#dbeafe" />
+      <directionalLight position={[2, 2, 5]} intensity={1.6} color="#dbeafe" />
       <directionalLight position={[-5, -2, -4]} intensity={0.35} color="#1e40af" />
       <Stars radius={90} depth={40} count={2600} factor={3.2} saturation={0} fade speed={0.4} />
 
@@ -392,7 +392,7 @@ function SceneContent({ state }: { state: OloLinkState }) {
 export function GlobeScene({ state }: { state: OloLinkState }) {
   return (
     <Canvas
-      camera={{ position: [-0.68, 0.86, -2.95], fov: 42 }}
+      camera={{ position: [0.7, 0.9, 2.95], fov: 42 }}
       dpr={[1, 2]}
       gl={{ antialias: true }}
       onPointerMissed={() => state.select(null)}
