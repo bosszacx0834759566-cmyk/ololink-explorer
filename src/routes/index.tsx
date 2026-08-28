@@ -76,7 +76,7 @@ function Explorer() {
 
       {/* ambient hint */}
       {!state.selection && !state.panel && (
-        <div className="pointer-events-none absolute bottom-16 left-1/2 z-20 -translate-x-1/2 text-center">
+        <div className="pointer-events-none absolute bottom-20 left-1/2 z-20 -translate-x-1/2 text-center">
           <p className="font-mono text-[9px] uppercase tracking-[0.3em] text-muted-foreground/50">
             Drag to orbit · click an asset or link to inspect
           </p>
