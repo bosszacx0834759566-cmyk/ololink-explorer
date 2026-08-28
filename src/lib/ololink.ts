@@ -323,7 +323,7 @@ export function linkStates(profile: ScenarioProfile): LinkState[] {
 export function geoToVec(lat: number, lon: number, altKm: number, scale = 1): [number, number, number] {
   const r = (1 + altKm / 6371 / 0.55) * scale; // exaggerated altitude for legibility
   const phi = (90 - lat) * (Math.PI / 180);
-  const theta = lon * (Math.PI / 180);
+  const theta = (lon + 180) * (Math.PI / 180);
   return [
     -r * Math.sin(phi) * Math.cos(theta),
     r * Math.cos(phi),

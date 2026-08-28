@@ -335,7 +335,7 @@ function SceneContent({ state }: { state: OloLinkState }) {
   return (
     <>
       <ambientLight intensity={1.05} />
-      <directionalLight position={[2, 2, 5]} intensity={1.6} color="#dbeafe" />
+      <directionalLight position={[-2, 2, -5]} intensity={1.6} color="#dbeafe" />
       <directionalLight position={[-5, -2, -4]} intensity={0.35} color="#1e40af" />
       <Stars radius={90} depth={40} count={2600} factor={3.2} saturation={0} fade speed={0.4} />
 
@@ -392,7 +392,7 @@ function SceneContent({ state }: { state: OloLinkState }) {
 export function GlobeScene({ state }: { state: OloLinkState }) {
   return (
     <Canvas
-      camera={{ position: [0.7, 0.9, 2.95], fov: 42 }}
+      camera={{ position: [-0.7, 0.9, -2.95], fov: 42 }}
       dpr={[1, 2]}
       gl={{ antialias: true }}
       onPointerMissed={() => state.select(null)}
